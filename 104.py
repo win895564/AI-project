@@ -79,7 +79,7 @@ for jobname in jobnames:
         ws.append(course)
         
         #print(f'第{count}筆資料為: \n'+jobname.text)
-wb.save(f'{inputkey}.xlsx')    
+wb.save(f'{inputkey}.xlsx')    #存為xlsx
 print('=====查詢動作已完成=====\n\n\n')  
 print(f'查詢到 {str(count)} 筆資料 已存為 {inputkey}.xlsx')
 driver.quit()
