@@ -4,16 +4,21 @@ Created on Thu Mar  3 13:27:15 2022
 
 @author: user
 """
+from selenium import webdriver
 from openpyxl import Workbook 
 import re
 import requests
 from requests_html import HTMLSession
 wb=Workbook()
 ws=wb.active
+opt=webdriver.ChromeOptions()
+opt.add_argument('User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62')
+opt.add_argument("disable-blink-features=AutomationControlled")
 
-head={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62'}
-url='https://lvr.land.moi.gov.tw/SERVICE/QueryPrice/427399ff97c2860b7656e42e2e95e0ad?q=VTJGc2RHVmtYMTkrV3R1aHVZZnpzbFlrc2RxSUM4Q2tuYWxJRURZYUxjV3gzYS82SGF5TFo0VWlaMWJPby8vSnQrMzRKWENIKzluMWsxaXRWbkRsb0h2TkUwL2lxSXBLaEVRSzJOVW1jeTJTQjJXTjRzRHpvZURHS2YvRlhvTnBjVnhoM09HaEFxelp6Sm5Odnl1TjlUUHoxZE4yY3ZJSUs5YXRqYkgzR256MGlVMTdoM3pVbFYvZVpDM1FUNHRzZTB1Smc5NWhvNC90SFBMY21sa1F2K2dzRG9McnduejlrZGJuZUl6a0dCblRxa3BWamxJMTJDTzJqUWw5eTRkd0lhQ1BFWWJ3d2ZBMGZ0cVNYbXRBNE5XUzJJREU0ODJFaDFpdUJOTjBqT3h6UnFnSXNNMXY1d1VVSE1Uc2FWekM0TlVwSldUZ1NoSVEvMWtGeWRhVmJnTHl4bHViMGJ5ajBJajdtSEgzVHJMY0xlTkhJTFdXeGw0RGtmSHl4c25OallMbGY5MVlYaXhmbGZ3VmdqTmdxSlZ1U0pSaTUxSXpObjcvaWc3b1pPTjJYeTZ3MUlrV1B6QnNQay9Ca2llWWw1VFlVdGxFL0ljZ0J2U2xkRmQ1WGtYVmI4aEczT3RDeUdpVjJvMDVDOXhJVlJmWlJGbEpCUTV4YUdTdHExS2ZrM1lmYnIxMllTdU9reGxaMW12QWZCME1FOXdRZlZMZW1VQXVtRVFGcEZJPQ=='
-r=requests.get(url=url,headers=head)
+url='https://lvr.land.moi.gov.tw/SERVICE/QueryPrice/418a148edffc9b673ffd70f20d0f7ff3?q=VTJGc2RHVmtYMS9ESG04Qjg2UXlsbVd1QklrY2dYTW9DUW1mcGJoSzdaeVo4dkVteUtvNnBOSzdRYkh0NjNDOGV5a1owOHhxclB2dGxjSXdSUTdsb2dqelJPYkNPVGdwdE52a2NrNll3cjExdmh5TUUvd1pFTzNsNnhiaHBzL0NlZHd0Rk5zQVEwa0U0YlBOYXdhaGErV2hPbDRmQy9FbHJCU2Q3Mm04UHEySWxQeW1lNHhNOXBIWEhxYWRHVmk4YmZqUGxPVi9yWk0wbGE4dm5yTXZuQk52NlEvb3RWK1FKLzlHTjhMT3BQakpGUE5xYitOK0ZlTU9tZE9JSmpzbzcvcmhCYjF1T3BsWVB0YjRZZmtXZVFuWUs0VmJ3R2s2ZVN1VHNPc1N6MUtZbjU1RmZJcWtiTjl2WnlmNFlhU3h4ZC9XSC9HaWFPdTN1eE0wWjZGRm1jcmQ4WFhMOEw3SUwzOGVvd1lpMDdSWE1zNEI5MnhVRGRJN3ZDeDIyMVVlemdZekRvK2JQcG9aaXRnWDJhL2NlTldqY3ExRWN3c1NvSGw0Vnd1R21WQW5IZ2hXa3J6QjBFZVpZdGZMUlpNRUJWbEJ0OGpVcXBzWVFWdnA3bDJuMnVmWjJtU0E5a2RTWTI2TllYRkZreU1CVWZYRmNham5Ta3krWlRQMnc4Y08rRXRZOGF2eXJaMTNxekhySWNBbFhlSThSU2dTaUZPRHZpdUphaWMyc1NvPQ=='
+
+r=requests.get(url)
+
 root_json=r.json()
 title=['地段位置','交易日期','屋齡','主要用途','總售價(萬元)','單價(萬元)/坪','總面積(坪)']
 ws.append(title)
@@ -38,17 +43,19 @@ for data in root_json:
         s1=s.replace(r',','')
         count+=1
         course=[]
+        
         course.append(data['a'])
         course.append(data['e'])
         course.append(data['g'])
         course.append(data['pu'])
         course.append(data['tp'])
-        course.append(str(int(s1)/10000))
+        course.append(str(round(int(s1)/10000,2)))
         course.append(data['s'])
         ws.append(course)
 
-wb.save('shalu.xlsx')
-print('已存為shalu.xlxs')    
+wb.save('test.xlsx')
+print('儲存完成!')    
+
 
     
     
