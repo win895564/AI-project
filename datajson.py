@@ -4,6 +4,7 @@ Created on Thu Mar  3 13:27:15 2022
 
 @author: user
 """
+
 from selenium import webdriver
 from openpyxl import Workbook 
 import re
@@ -14,9 +15,11 @@ ws=wb.active
 opt=webdriver.ChromeOptions()
 opt.add_argument('User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.62')
 opt.add_argument("disable-blink-features=AutomationControlled")
-
-url='https://lvr.land.moi.gov.tw/SERVICE/QueryPrice/418a148edffc9b673ffd70f20d0f7ff3?q=VTJGc2RHVmtYMS9ESG04Qjg2UXlsbVd1QklrY2dYTW9DUW1mcGJoSzdaeVo4dkVteUtvNnBOSzdRYkh0NjNDOGV5a1owOHhxclB2dGxjSXdSUTdsb2dqelJPYkNPVGdwdE52a2NrNll3cjExdmh5TUUvd1pFTzNsNnhiaHBzL0NlZHd0Rk5zQVEwa0U0YlBOYXdhaGErV2hPbDRmQy9FbHJCU2Q3Mm04UHEySWxQeW1lNHhNOXBIWEhxYWRHVmk4YmZqUGxPVi9yWk0wbGE4dm5yTXZuQk52NlEvb3RWK1FKLzlHTjhMT3BQakpGUE5xYitOK0ZlTU9tZE9JSmpzbzcvcmhCYjF1T3BsWVB0YjRZZmtXZVFuWUs0VmJ3R2s2ZVN1VHNPc1N6MUtZbjU1RmZJcWtiTjl2WnlmNFlhU3h4ZC9XSC9HaWFPdTN1eE0wWjZGRm1jcmQ4WFhMOEw3SUwzOGVvd1lpMDdSWE1zNEI5MnhVRGRJN3ZDeDIyMVVlemdZekRvK2JQcG9aaXRnWDJhL2NlTldqY3ExRWN3c1NvSGw0Vnd1R21WQW5IZ2hXa3J6QjBFZVpZdGZMUlpNRUJWbEJ0OGpVcXBzWVFWdnA3bDJuMnVmWjJtU0E5a2RTWTI2TllYRkZreU1CVWZYRmNham5Ta3krWlRQMnc4Y08rRXRZOGF2eXJaMTNxekhySWNBbFhlSThSU2dTaUZPRHZpdUphaWMyc1NvPQ=='
-
+print('輸入url:')
+url=input()
+print('輸入檔名:')
+file_name=input()
+#url='https://lvr.land.moi.gov.tw/SERVICE/QueryPrice/d5e11d41d43c30db850da4a09bbe59ce?q=VTJGc2RHVmtYMS9NWEZyditJVzRJaUpHT3pEMDhJMHY1T3BjdFF5MWlMYzJPTWhlM2tzV1JBeGVkUDhxb2JXMEhwMmJFb1JzV3JIUEk5dmttMGtsTk81aW1qVUVvLzdrb3d2azJiblRGOVlaQmk0UGxTUmVSNk5RMkYxOWJZTnF0R0wxMXJBb2xnd2xpVUxBSGpncVlJSnhsRFluSG0vdEp4K09OeGFNRXFJbVV2QzMxY2dXWFplb2EzNldQbUk3WGYzWVE3SDM0bno4TTlnR2tkemxvM0JBNEVmVS9ieEpFamUrcnh4S2E1TDFyaUtLRVdXem9abEIrS1huaVhpNzQ0dkRzUmZ2ZjFVKzJHL1VPemxxbHpXQ21tbTNHUUtGcmNvbmJnenhDQ2RBWGI3K0FmclBDMXlZVWtQa3dMUDNmK3pIbnpDOWlJMTBRSVMybDJ1SENUeFA0TXllQW8rTXpoUGlkWWs3VnZoSTAyNUE0VXhxUTdLM3BXYkJDejhzMUh0Y2ZyY2VpU2pCV3l3YW8xQmVwUk5oQXViS2RJMUtxVWRTdnUrZ1hnamVySXlKa0w5alp6MTU3WDUzQzByY1dwcFRGU3FpZkdUVkhYczJ2NnB0V1gvUmVkclpTMGNxTDdGVU1rLzIyWCtHbG1TM2d0TVJSbU9CS0hsQytxejZXWlBGRGFQbytMQ0labVZmdld0dHhrUzlwa0k1SzlaelZEMnVqS0JGTWlrPQ=='
 r=requests.get(url)
 
 root_json=r.json()
@@ -26,10 +29,11 @@ count=0
 print(f'查詢到:{len(root_json)}筆資料')
 
 for data in root_json:
-    if len(data['p']) ==0:
+    if len(data['p']) ==0: 
         count+=1
         course=[]
-        course.append(data['a'])
+        a_tmp=re.split('#',data['a'])
+        course.append(a_tmp[1])
         course.append(data['e'])
         course.append(data['g'])
         course.append(data['pu'])
@@ -43,8 +47,8 @@ for data in root_json:
         s1=s.replace(r',','')
         count+=1
         course=[]
-        
-        course.append(data['a'])
+        a_tmp=re.split('#',data['a'])
+        course.append(a_tmp[1])#地址格是為xxxx#xxxx 一方面有編碼問題 另一方面是
         course.append(data['e'])
         course.append(data['g'])
         course.append(data['pu'])
@@ -53,9 +57,8 @@ for data in root_json:
         course.append(data['s'])
         ws.append(course)
 
-wb.save('test.xlsx')
-print('儲存完成!')    
-
+wb.save(f'{file_name}.xlsx')
+print('儲存完成!')  
 
     
     
