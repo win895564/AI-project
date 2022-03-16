@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Mar 16 10:25:02 2022
+
+@author: user
+"""
+from urllib.parse import quote,unquote
+#quote 編碼
+#unquote 解碼
+d1='沙鹿區'
+d2='%E5%8F%B0%E4%B8%AD%E5%B8%82%E5%8C%97%E5%B1%AF%E5%8D%80%E7%80%8B%E9%99%BD%E8%B7%AF%E4%BA%8C%E6%AE%B5175%E8%99%9F'
+print(unquote(d2) )
