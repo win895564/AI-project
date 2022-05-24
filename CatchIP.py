@@ -10,4 +10,5 @@ def catch_ip():
     r=requests.get('https://myip.com.tw/')
     soup=bs(r.text,'html.parser')
     soup_ip=soup.find('font')
-    return soup_ip.text
+    IP=soup_ip.text
+    return IP

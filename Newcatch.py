@@ -7,7 +7,7 @@ Created on Thu Apr 14 11:49:38 2022
 
 from bs4 import BeautifulSoup as bs
 import requests
-import re
+
 def catch():
     News=[]
     r=requests.get('https://www.storm.mg/category/k4747')
@@ -19,8 +19,9 @@ def catch():
     soup_time=soup.find_all('span',class_='info_time')
     
     for link,img,title ,sub ,s_time in zip(soup_link,soup_img,soup_title,soup_substance,soup_time):
-        News.append([title.text,sub.text,link.get('href'),str(img.get('src')).replace('150x150','855x445'),s_time.text])
+        News.append([title.text,sub.text,link.get('href'),str(img.get('src')).replace('150x150','855x445') ,s_time.text])
     del News[0]    
-    return '123'
+    return News
     
 
+    
